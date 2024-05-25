@@ -141,6 +141,7 @@ function App() {
 
   return (
     <div className={`App ${isDayTime ? "day-background" : "night-background"}`}>
+      <NavBar />
       <div className="container mt-5">
         <div
           className="card mb-3" // Reduced margin-bottom
@@ -261,5 +262,39 @@ function App() {
     </div>
   );
 }
+
+function NavBar() {
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const timerId = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(timerId);
+  }, []);
+
+  const refreshPage = () => {
+    window.location.reload();
+  };
+
+  return (
+    <nav
+      className="navbar navbar-expand-lg navbar-light fixed-top"
+      style={{
+        background:
+          "linear-gradient(to bottom, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0))",
+        backdropFilter: "blur(5px)",
+      }}
+    >
+      <div className="container">
+        <a className="navbar-brand" href="#" onClick={refreshPage}>
+          WeatherOrNot
+        </a>
+        <div className="ml-auto">
+          <span className="navbar-text">{time.toLocaleTimeString()}</span>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
 
 export default App;
