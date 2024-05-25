@@ -10,7 +10,6 @@ import {
   faSmog,
 } from "@fortawesome/free-solid-svg-icons";
 
-
 function App() {
   const [city, setCity] = useState("");
   const [weatherData, setWeatherData] = useState(null);
@@ -23,10 +22,9 @@ function App() {
       fetchCurrentLocation();
     }
 
-   const currentTime = new Date();
-   const currentHour = currentTime.getHours();
-   setIsDayTime(currentHour >= 6 && currentHour < 18);
-
+    const currentTime = new Date();
+    const currentHour = currentTime.getHours();
+    setIsDayTime(currentHour >= 6 && currentHour < 18);
   }, [autoFetched]);
 
   const fetchCurrentLocation = () => {
@@ -101,7 +99,6 @@ function App() {
     }
   };
 
-
   const getIconColor = (condition) => {
     switch (condition) {
       case "Clear":
@@ -133,25 +130,20 @@ function App() {
     ];
     const today = new Date();
     const date = new Date(dateString);
-    date.setUTCDate(today.getUTCDate() + index); // Adjust the date to get the next day in UTC
+    date.setUTCDate(today.getUTCDate() + index + 1); // Adjust the date to get the next day in UTC
     return days[date.getUTCDay()];
   };
-
-
-
-
 
   const formatEpochTime = (epoch) => {
     const date = new Date(epoch * 1000);
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
-
   return (
     <div className={`App ${isDayTime ? "day-background" : "night-background"}`}>
       <div className="container mt-5">
         <div
-          className="card"
+          className="card mb-3" // Reduced margin-bottom
           style={{ backgroundColor: "rgba(255, 255, 255, 0.7)" }}
         >
           <div className="card-header">
@@ -181,57 +173,88 @@ function App() {
             ) : (
               weatherData && (
                 <div>
-                  <h3>Todays Weather in {weatherData.resolvedAddress}</h3>
-                  <p>Temperature: {weatherData.currentConditions.temp}°F</p>
-                  <p>Feels Like: {weatherData.currentConditions.feelslike}°F</p>
-                  <p>
-                    Condition: {weatherData.currentConditions.conditions}{" "}
-                    {getWeatherIcon(
-                      weatherData.currentConditions.conditions,
-                      getIconColor(weatherData.currentConditions.conditions)
-                    )}
-                  </p>
-                  <p>Weather Description: {weatherData.description}</p>
-                  <p>
-                    Sunrise:{" "}
-                    {formatEpochTime(
-                      weatherData.currentConditions.sunriseEpoch
-                    )}
-                  </p>
-                  <p>
-                    Sunset:{" "}
-                    {formatEpochTime(weatherData.currentConditions.sunsetEpoch)}
-                  </p>
+                  <h3>Today's Weather in {weatherData.resolvedAddress}</h3>
+                  <div
+                    className="card mb-2"
+                    style={{
+                      backgroundColor: "#f8f9fa",
+                      borderColor: "#007bff",
+                    }}
+                  >
+                    <div className="card-body p-2">
+                      {" "}
+                      {/* Reduced padding */}
+                      <h4 className="card-title mb-2">Today's Weather</h4>
+                      <p className="mb-1">
+                        Temp: {weatherData.currentConditions.temp}°F
+                      </p>
+                      <p className="mb-1">
+                        Feels Like: {weatherData.currentConditions.feelslike}°F
+                      </p>
+                      <p className="mb-1">
+                        {weatherData.currentConditions.conditions}{" "}
+                        {getWeatherIcon(
+                          weatherData.currentConditions.conditions,
+                          getIconColor(weatherData.currentConditions.conditions)
+                        )}
+                      </p>
+                      <p className="mb-1">Weather: {weatherData.description}</p>
+                      <p className="mb-1">
+                        Sunrise:{" "}
+                        {formatEpochTime(
+                          weatherData.currentConditions.sunriseEpoch
+                        )}
+                      </p>
+                      <p className="mb-1">
+                        Sunset:{" "}
+                        {formatEpochTime(
+                          weatherData.currentConditions.sunsetEpoch
+                        )}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    {weatherData &&
+                      weatherData.days.slice(1, 7).map((day, index) => (
+                        <div
+                          className="col-6 col-md-2 mt-4" // Adjusted to fit more cards in a row
+                          key={index}
+                          style={{ marginBottom: "10px" }}
+                        >
+                          <div className="card h-100">
+                            <div className="card-body p-1">
+                              {" "}
+                              <h6 className="card-title mb-1">
+                                {" "}
+                                {getDayOfWeek(day.datetime, index)}
+                              </h6>
+                              <p
+                                className="mb-1"
+                                style={{ fontSize: "0.9rem" }}
+                              >
+                                {" "}
+                                Temp: {day.temp}°F
+                              </p>
+                              <p
+                                className="mb-1"
+                                style={{ fontSize: "0.9rem" }}
+                              >
+                                {" "}
+                                {day.conditions}{" "}
+                                {getWeatherIcon(
+                                  day.conditions,
+                                  getIconColor(day.conditions)
+                                )}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
                 </div>
               )
             )}
-
-            <div className="row">
-              {weatherData &&
-                weatherData.days.slice(0, 7).map((day, index) => (
-                  <div
-                    className="col"
-                    key={index}
-                    style={{ marginBottom: "15px" }}
-                  >
-                    <div className="card">
-                      <div className="card-body" style={{ height: "230px" }}>
-                        <h5 className="card-title">
-                          {getDayOfWeek(day.datetime, index)}
-                        </h5>
-                        <p className="card-text">Temperature: {day.temp}°F</p>
-                        <p className="card-text">
-                          Condition: {day.conditions}{" "}
-                          {getWeatherIcon(
-                            day.conditions,
-                            getIconColor(day.conditions)
-                          )}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-            </div>
           </div>
         </div>
       </div>
