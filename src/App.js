@@ -183,9 +183,6 @@ function App() {
                     }}
                   >
                     <div className="card-body p-2">
-                      {" "}
-                      {/* Reduced padding */}
-                      <h4 className="card-title mb-2">Today's Weather</h4>
                       <p className="mb-1">
                         Temp: {weatherData.currentConditions.temp}°F
                       </p>
