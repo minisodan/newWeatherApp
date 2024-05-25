@@ -286,7 +286,7 @@ function NavBar() {
     >
       <div className="container">
         <a className="navbar-brand" href="#" onClick={refreshPage}>
-          WeatherOrNot
+          WeatherNot
         </a>
         <div className="ml-auto">
           <span className="navbar-text">{time.toLocaleTimeString()}</span>
@@ -295,6 +295,5 @@ function NavBar() {
     </nav>
   );
 }
-
 
 export default App;
